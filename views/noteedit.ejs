@@ -1,0 +1,20 @@
+<% include top %>
+<form method='POST' action='/notesave'>
+<input type='hidden' name='docreate' value='<%= docreate ? "create" : "update"%>'>
+<p>Key:
+<% if (docreate) { %>
+    <input type='text' name='notekey' value=''/>
+<% } else { %>
+    <%= note ? notekey : "" %>
+    <input type='hidden' name='notekey' value='<%= note ? notekey : "" %>'/>
+<% } %>
+</p>
+<p>Title: <input type='text' name='title' value='<%= note ? note.title : "" %>' /></p>
+<br/><textarea rows=5 cols=40 name='body' ><%= note ? note.body : "" %></textarea>
+<br/>
+<p>Begin: <input type='text' name='begin' value='<%= note ? note.begin : "" %>' /></p>
+<p>End: <input type='text' name='end' value='<%= note ? note.end : "" %>' /></p>
+<p>Pattern: <input type='text' name='pattern' value='<%= note ? note.pattern : "" %>' /></p>
+<br/><input type='submit' value='Submit' />
+</form>
+<% include bottom %>

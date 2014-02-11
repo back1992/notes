@@ -1,0 +1,60 @@
+<html>
+<head>
+    <title><%= title %></title>
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <link rel='stylesheet' href='//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = undefined;
+        var delMessage = function(idTo, idFrom, message) {
+            socket.emit('dodelmessage', idTo, idFrom, message);
+        }
+        $(document).ready(function() {
+            socket = io.connect('/'); // socket.io-client 0.9.x
+            // socket = io('/'); // socket.io-client 1.0.x
+            
+            <% if (user) { %>
+                var getmessages = function() {
+                  socket.emit('getmessages', <%= user.id %>, function (msgs) {
+                    $('#messageBox').empty();
+                    if (msgs.length > 0) {
+                        msgs.forEach(function(msg) {
+                            $('#messageBox').append('<p>'+
+                                '<button onclick="delMessage('+ msg.idTo +', '+ msg.idFrom +', \''+ msg.message +'\')">DEL</button>'+
+                                msg.fromName +': '+ msg.message
+                                +'</p>');
+                        });
+                        $('#messageBox').show();
+                    } else $('#messageBox').hide();
+
+                });
+              };
+              getmessages();
+              socket.on('newmessage', function(id) {
+                getmessages();
+            });
+              socket.on('delmessage', getmessages);
+              <% } %>
+          });
+</script>
+</head>
+<body>
+    <h1><%= title %></h1>
+    <ul class="nav nav-pills">
+      <li class="active"><a href='/'>Home</a></li>
+      <% if (user) { %>
+      <li><a href='/quiz'>Quiz List</a></li>
+      <li><a href='/fetchweb'>Fetch Web</a></li>
+      <li><a href='/getcontent'>Get Content</a></li>
+      <li><a href='/noteadd'>ADD Note</a></li>
+      <li><a href="/sendmessage">Send message</a></li>
+      <li><a href="/logout">Log Out</a></li>
+      <li>logged in as <a href="/account"><%= user.username %></a></li>
+      <% } else { %>
+      <li><a href="/login">Log in</a></li>
+      <% } %>
+  </ul>
+  <% if (user) { %>
+  <div id="messageBox" style=Ódisplay:none;Ó></div>
+  <% } %>

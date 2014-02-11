@@ -1,0 +1,62 @@
+<% include top %>
+<%=
+var request = require('request');
+request('http://www.baidu.com', function (error, response, body) {
+  if (!error && response.statusCode == 200) {
+    console.log(body); // Print the google web page.
+    body; // Print the google web page.
+  }
+}) 
+ %>
+
+<div id='notetitles'> 
+  <table class="table table-striped table-hover table-bordered">
+    <thead>
+      <tr class="success">
+        <th width="*">No</th>
+        <th width="*">Title</th>
+        <th width="*">Url</th>
+        <!-- <th width="*">Action</th> -->
+      </tr>
+    </thead>
+    <tbody>
+      <%
+      if (notes) {
+          var i = 1;
+        notes.forEach(function(note) {
+          %>
+          <tr>
+
+            <td><%= i %></td>
+            <td><%= note.key %>:</td>
+            <td><a href="/noteview?key=<%= note.key %>"><%= note.title %></a>
+            </td>
+            <!-- <td><%= note.key %>:</td> -->
+          </tr><%
+          i++
+        });
+      }
+      %>
+    </tbody>
+  </table>
+</div>
+
+</div>
+
+<script>
+  $(document).ready(function() {
+    var getnotetitles = function() {
+      socket.emit('notetitles', function (notes) {
+        $('#notetitles').empty();
+        notes.forEach(function(note) {
+          $('#notetitles').append('<p>'+ note.key 
+            +': <a href="/noteview?key='+ note.key +'">'+ note.title +'</a></p>');
+        });
+      });
+    }
+    socket.on('noteupdated', getnotetitles);
+    socket.on('notedeleted', getnotetitles);
+  });
+</script>
+
+<% include bottom %>

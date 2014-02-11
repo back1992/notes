@@ -1,0 +1,18 @@
+<html>
+<head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+    <h1><%= title %></h1>
+    <div class='navbar'>
+    <p><a href='/'>Home</a>
+        | <a href='/noteadd'>ADD Note</a>
+        <% if (user) { %>
+        | <a href="/logout">Log Out</a>
+        | logged in as <a href="/account"><%= user.username %></a>
+        <% } else { %>
+        | <a href="/login">Log in</a>
+        <% } %>
+    </p>
+    </div>

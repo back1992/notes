@@ -1,0 +1,7 @@
+module.exports = {
+    dbname: "dshnotestest", username: "david", password: "gr00pum",
+    params: {
+      host: 'mysql.davidherron.com',
+      dialect: 'mysql'
+    }
+};

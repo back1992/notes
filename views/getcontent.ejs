@@ -1,0 +1,39 @@
+<% include top %>
+
+<h1> <%= title %></h1>
+<p> Welcome to <%= title %></p>
+
+<div id='notetitles'> 
+	<table class="table table-striped table-hover table-bordered">
+		<thead>
+			<tr class="success">
+				<th width="*">No</th>
+				<th width="*">Url</th>
+				<th width="*">Open</th>
+				<th width="*">Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			<%
+			if (notes) {
+				var i = 1;
+				notes.forEach(function(note) {
+					var url = note.replace( new RegExp("^href=\"","gm"),"")
+					%>
+					<tr>
+
+						<td><%= i %></td>
+						<td><%= url %></td>
+						<td>
+							<button class="btn btn-info" onClick="window.open('<%= url %>');"><span class="icon">Open</span></button>
+						</td>
+						<td><a href="/getcontent?key=<%= note.key %>" class="btn btn-info" role="button"><%= "Action" %></a></td>
+					</tr><%
+					i++
+				});
+			}
+			%>
+		</tbody>
+	</table>
+</div>
+<% include bottom %>

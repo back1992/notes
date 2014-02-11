@@ -1,0 +1,42 @@
+<% include top %>
+<div id="noteview">
+<h3 id="notetitle">Title: <%= note ? note.title : "" %></h3>
+<p id="notebody">Body :<a href="<%= note.body %>" target='blank'><%= note ? note.body : "" %></a></p>
+<p id="notebegin">Begin: <%= note ? note.begin : "" %></p>
+<p id="noteend">End: <%= note ? note.end : "" %></p>
+<p id="notepattern">Pattern: <%= note ? note.pattern : "" %></p>
+<p>Key: <%= notekey %></p>
+<% if (user && notekey) { %>
+    <hr/>
+    <p><a href="/notedestroy?key=<%= notekey %>">Delete</a>
+     | <a href="/noteedit?key=<%= notekey %>">Edit</a></p>
+<% } %>
+</div>
+
+<script>
+    $(document).ready(function() {
+        var updatenote = function(newnote) {
+            $('#notetitle').empty();
+            $('#notetitle').append(newnote.title);
+            $('#notebody').empty();
+            $('#notebody').append(newnote.body);
+            $('#notebegin').empty();
+            $('#notebegin').append(newnote.begin);
+            $('#noteend').empty();
+            $('#noteend').append(newnote.end);
+            $('#notepattern').empty();
+            $('#notepattern').append(newnote.pattern);
+        }
+        socket.on('noteupdated', function(newnote) {
+            if (newnote.key === "<%= notekey %>") {
+                updatenote(newnote);
+            }
+        });
+        socket.on('notedeleted', function(notekey) {
+            if (notekey === "<%= notekey %>") {
+                document.location.href = "/";
+            }
+        })
+    });
+</script>
+<% include bottom %>
